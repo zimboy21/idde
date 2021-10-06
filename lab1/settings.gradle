@@ -1,0 +1,2 @@
+// almodulok definiciója relatív elérési útvonal szerint
+include 'zdim1981-backend', 'zdim1981-desktop'
