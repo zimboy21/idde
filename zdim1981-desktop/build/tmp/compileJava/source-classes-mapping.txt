@@ -1,2 +1,0 @@
-edu/bbte/idde/zdim1981/desktop/FrontendMain.java
- edu.bbte.idde.zdim1981.desktop.FrontendMain
