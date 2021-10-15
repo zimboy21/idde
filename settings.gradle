@@ -1,0 +1,4 @@
+rootProject.name = 'lab-zdim1981'
+include 'zdim1981-backend'
+include 'zdim1981-desktop'
+
