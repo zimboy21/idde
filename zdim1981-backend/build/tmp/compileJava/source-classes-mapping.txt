@@ -1,0 +1,10 @@
+edu/bbte/idde/zdim1981/backend/model/BaseEntity.java
+ edu.bbte.idde.zdim1981.backend.model.BaseEntity
+edu/bbte/idde/zdim1981/backend/model/HardwareShopCpu.java
+ edu.bbte.idde.zdim1981.backend.model.HardwareShopCpu
+edu/bbte/idde/zdim1981/backend/Backend.java
+ edu.bbte.idde.zdim1981.backend.Backend
+edu/bbte/idde/zdim1981/backend/dataAccessObject/HardwareShopCpuDao.java
+ edu.bbte.idde.zdim1981.backend.dataAccessObject.HardwareShopCpuDao
+edu/bbte/idde/zdim1981/backend/dataAccessObject/BaseEntityDao.java
+ edu.bbte.idde.zdim1981.backend.dataAccessObject.BaseEntityDao
