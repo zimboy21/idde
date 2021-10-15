@@ -1,4 +1,4 @@
-package edu.bbte.idde.zdim1981.backend.dataAccessObject;
+package edu.bbte.idde.zdim1981.backend.dataaccessobject;
 
 import edu.bbte.idde.zdim1981.backend.model.BaseEntity;
 
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class HardwareShopCpuDao implements BaseEntityDao{
+public class HardwareShopCpuDao implements BaseEntityDao {
     private ConcurrentHashMap<Long, BaseEntity> cpuDatabase;
     private AtomicLong key;
 
@@ -28,8 +28,8 @@ public class HardwareShopCpuDao implements BaseEntityDao{
     }
 
     @Override
-    public void update(BaseEntity entity, Long id){
-        cpuDatabase.computeIfPresent(id, (key, value) -> value = entity);
+    public void update(BaseEntity entity, Long id) {
+        cpuDatabase.computeIfPresent(id, (key, value) -> entity);
     }
 
     @Override

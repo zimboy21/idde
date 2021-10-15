@@ -1,14 +1,13 @@
 package edu.bbte.idde.zdim1981.desktop;
 
-import edu.bbte.idde.zdim1981.backend.Backend;
-import edu.bbte.idde.zdim1981.backend.dataAccessObject.HardwareShopCpuDao;
+import edu.bbte.idde.zdim1981.backend.dataaccessobject.HardwareShopCpuDao;
 import edu.bbte.idde.zdim1981.backend.model.BaseEntity;
 import edu.bbte.idde.zdim1981.backend.model.HardwareShopCpu;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FrontendMain {
-    public static final Backend backend = new Backend();
+
     public static final Logger LOG = LoggerFactory.getLogger(FrontendMain.class);
 
     public static void main(String[] args) {

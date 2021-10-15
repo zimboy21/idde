@@ -1,6 +1,6 @@
 package edu.bbte.idde.zdim1981.backend.model;
 
-public class HardwareShopCpu extends BaseEntity{
+public class HardwareShopCpu extends BaseEntity {
     private String name;
     private double price;
     private double clockSpeed;
@@ -17,11 +17,11 @@ public class HardwareShopCpu extends BaseEntity{
 
     @Override
     public String toString() {
-        return "Specs of " + name + ":" +
-                "\n     price: " + price +
-                "\n     clock speed: " + clockSpeed +
-                "\n     overclocking: " + overClocking +
-                "\n     number of cores: " + coreCount;
+        return "Specs of " + name + ":"
+                + "\n     price: " + price
+                + "\n     clock speed: " + clockSpeed
+                + "\n     overclocking: " + overClocking
+                + "\n     number of cores: " + coreCount;
     }
 
     public String getName() {
