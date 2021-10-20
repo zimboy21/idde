@@ -1,6 +1,6 @@
 package edu.bbte.idde.zdim1981.desktop;
 
-import edu.bbte.idde.zdim1981.backend.dataaccessobject.HardwareShopCpuDao;
+import edu.bbte.idde.zdim1981.backend.dataaccessobject.mem.HardwareShopCpuInMemDao;
 import edu.bbte.idde.zdim1981.backend.model.BaseEntity;
 import edu.bbte.idde.zdim1981.backend.model.HardwareShopCpu;
 import org.slf4j.Logger;
@@ -12,20 +12,20 @@ public class FrontendMain {
 
     public static void main(String[] args) {
         // System.out.println("Hello " + backend.getName());
-        HardwareShopCpuDao cpuDao = new HardwareShopCpuDao();
+        HardwareShopCpuInMemDao cpuDao = new HardwareShopCpuInMemDao();
         cpuDao.create(new HardwareShopCpu("AMD Ryzen 9 5950X", 2000, 3.4, 1, 16));
         HardwareShopCpu newCpu = new HardwareShopCpu("Intel Core i9", 1750.6, 3.6, 2, 24);
 
-        LOG.info(cpuDao.read(0L).toString());
+        LOG.debug(cpuDao.read(0L).toString());
         cpuDao.update(newCpu, 0L);
-        LOG.info(cpuDao.read(0L).toString());
+        LOG.debug(cpuDao.read(0L).toString());
         cpuDao.delete(0L);
 
         cpuDao.create(new HardwareShopCpu("AMD Ryzen 9 5950X", 2000, 3.4, 1, 16));
         cpuDao.create(newCpu);
 
         for (BaseEntity cpu : cpuDao.readAll()) {
-            LOG.info(cpu.toString());
+            LOG.debug(cpu.toString());
         }
     }
 }
