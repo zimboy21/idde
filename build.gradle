@@ -1,0 +1,14 @@
+subprojects {
+    apply plugin : 'java'
+    apply plugin: 'maven-publish'
+    apply from: "${rootDir}/lint.gradle"
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+allprojects {
+    group 'edu.bbte.idde.lab-zdim1981'
+    version '1.0-SNAPSHOT'
+}

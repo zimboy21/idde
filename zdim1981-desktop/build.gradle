@@ -1,0 +1,9 @@
+apply plugin: 'application'
+
+dependencies {
+    implementation project(':zdim1981-backend')
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    runtimeOnly group: 'ch.qos.logback', name:'logback-classic', version:'1.2.3'
+}
+
+mainClassName = 'edu.bbte.idde.zdim1981.desktop.FrontendMain'
