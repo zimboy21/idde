@@ -38,7 +38,7 @@ pmd {
     ignoreFailures = true
     ruleSetFiles = files("${configDir}/pmd-ruleset.xml")
     ruleSets = []
-    rulePriority = 5
+    rulesMinimumPriority = 5
     try { incrementalAnalysis = true } catch(def e) {}
 }
 

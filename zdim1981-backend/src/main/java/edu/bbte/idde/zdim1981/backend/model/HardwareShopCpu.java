@@ -1,14 +1,14 @@
 package edu.bbte.idde.zdim1981.backend.model;
 
 public class HardwareShopCpu extends BaseEntity {
-    private int lcache;
-    private double price;
-    private double clockSpeed;
-    private int overClocking;
-    private int coreCount;
+    private String name;
+    private Double price;
+    private Double clockSpeed;
+    private Integer overClocking;
+    private Integer coreCount;
 
-    public HardwareShopCpu(int lcache, double price, double clockSpeed, int overClocking, int coreCount) {
-        this.lcache = lcache;
+    public HardwareShopCpu(String name, Double price, Double clockSpeed, Integer overClocking, Integer coreCount) {
+        this.name = name;
         this.price = price;
         this.clockSpeed = clockSpeed;
         this.overClocking = overClocking;
@@ -18,50 +18,50 @@ public class HardwareShopCpu extends BaseEntity {
     @Override
     public String toString() {
         return "Specs of CPU: "
-                + "\n     L Cache: " + lcache
+                + "\n     L Cache: " + name
                 + "\n     price: " + price
                 + "\n     clock speed: " + clockSpeed
                 + "\n     overclocking: " + overClocking
                 + "\n     number of cores: " + coreCount;
     }
 
-    public int getLCache() {
-        return lcache;
+    public String getName() {
+        return name;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public double getClockSpeed() {
+    public Double getClockSpeed() {
         return clockSpeed;
     }
 
-    public int getOverClocking() {
+    public Integer getOverClocking() {
         return overClocking;
     }
 
-    public int getCoreCount() {
+    public Integer getCoreCount() {
         return coreCount;
     }
 
-    public void setlCache(int lcache) {
-        this.lcache = lcache;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public void setClockSpeed(double clockSpeed) {
+    public void setClockSpeed(Double clockSpeed) {
         this.clockSpeed = clockSpeed;
     }
 
-    public void setOverClocking(int overClocking) {
+    public void setOverClocking(Integer overClocking) {
         this.overClocking = overClocking;
     }
 
-    public void setCoreCount(int coreCount) {
+    public void setCoreCount(Integer coreCount) {
         this.coreCount = coreCount;
     }
 }
