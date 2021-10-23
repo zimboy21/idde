@@ -11,18 +11,17 @@ public class FrontendMain {
     public static final Logger LOG = LoggerFactory.getLogger(FrontendMain.class);
 
     public static void main(String[] args) {
-        // System.out.println("Hello " + backend.getName());
         HardwareShopCpuInMemDao cpuDao = new HardwareShopCpuInMemDao();
-        cpuDao.create(new HardwareShopCpu("AMD Ryzen 9 5950X", 2000, 3.4, 1, 16));
-        HardwareShopCpu newCpu = new HardwareShopCpu("Intel Core i9", 1750.6, 3.6, 2, 24);
+        cpuDao.create(new HardwareShopCpu(3, 2000, 3.4, 1, 16));
+        HardwareShopCpu i7 = new HardwareShopCpu(2, 1750.6, 3.6, 2, 24);
 
         LOG.debug(cpuDao.read(0L).toString());
-        cpuDao.update(newCpu, 0L);
+        cpuDao.update(i7, 0L);
         LOG.debug(cpuDao.read(0L).toString());
         cpuDao.delete(0L);
 
-        cpuDao.create(new HardwareShopCpu("AMD Ryzen 9 5950X", 2000, 3.4, 1, 16));
-        cpuDao.create(newCpu);
+        cpuDao.create(new HardwareShopCpu(6, 2000, 3.4, 1, 16));
+        cpuDao.create(i7);
 
         for (BaseEntity cpu : cpuDao.readAll()) {
             LOG.debug(cpu.toString());
