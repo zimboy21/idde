@@ -1,0 +1,17 @@
+.bordered {
+    border: solid #d14444;
+    padding: 0.2em 0.5em;
+    border-radius: 8px;
+}
+
+.inlinediv {
+    box-sizing: border-box;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+    width: 150;
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 32px 32px 0;
+}
