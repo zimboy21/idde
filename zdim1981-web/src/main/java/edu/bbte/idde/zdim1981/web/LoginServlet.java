@@ -1,13 +1,9 @@
 package edu.bbte.idde.zdim1981.web;
 
-import edu.bbte.idde.zdim1981.backend.dataaccessobject.mem.CpuShopInMemDao;
-import edu.bbte.idde.zdim1981.backend.dataaccessobject.CpuShopDao;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.Version;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -18,8 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
-    protected Cookie cookie;
-    protected HttpSession session;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -37,7 +31,8 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String user = request.getParameter("user");
         String pwd = request.getParameter("pwd");
 
@@ -45,14 +40,13 @@ public class LoginServlet extends HttpServlet {
         final String password = "password";
 
         if (username.equals(user) && password.equals(pwd)) {
-            session = request.getSession();
-            session.setAttribute("user", "Zimi");
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
             session.setMaxInactiveInterval(30 * 60);
-            cookie = new Cookie("user", user);
+            Cookie cookie = new Cookie("user", user);
             cookie.setMaxAge(30 * 60);
             response.addCookie(cookie);
-            RequestDispatcher rd = request.getRequestDispatcher("/cputemplate");
-            rd.forward(request, response);
+            response.sendRedirect("/cputemplate");
         } else {
             Configuration cfg = new Configuration(new Version("2.3.31"));
 
