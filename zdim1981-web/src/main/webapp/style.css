@@ -1,0 +1,49 @@
+button {
+    background-color: #d14444;
+    border: none;
+    color: black;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    transition-duration: 0.4s;
+    border: 2px solid #d14444
+}
+
+.bordered {
+    border: solid #d14444;
+    padding: 0.2em 0.5em;
+    border-radius: 8px;
+}
+
+.inlinediv {
+    box-sizing: border-box;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+    width: 150;
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 32px 32px 0;
+}
+
+fieldset {
+    border: #d14444 solid 3px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+legend {
+    padding: 0.2em 0.5em;
+    border: 3px solid #d14444;
+    font-size: x-large;
+    font-weight: bold;
+    color: black;
+    text-align: left;
+    background-color: #d14444;
+    border-radius: 8px;
+    width: fit-content;
+}

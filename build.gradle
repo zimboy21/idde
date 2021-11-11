@@ -3,6 +3,12 @@ subprojects {
     apply plugin: 'maven-publish'
     apply from: "${rootDir}/lint.gradle"
 
+    dependencies {
+        implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.31'
+        implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+        runtimeOnly group: 'ch.qos.logback', name:'logback-classic', version:'1.2.3'
+    }
+
     repositories {
         mavenCentral()
     }

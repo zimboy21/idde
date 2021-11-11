@@ -1,18 +1,23 @@
 package edu.bbte.idde.zdim1981.backend.model;
 
-public class HardwareShopCpu extends BaseEntity {
+public class CpuShop extends BaseEntity {
     private String name;
     private Double price;
     private Double clockSpeed;
     private Integer overClocking;
     private Integer coreCount;
 
-    public HardwareShopCpu(String name, Double price, Double clockSpeed, Integer overClocking, Integer coreCount) {
+    public CpuShop(String name, Double price, Double clockSpeed, Integer overClocking, Integer coreCount) {
+        super();
         this.name = name;
         this.price = price;
         this.clockSpeed = clockSpeed;
         this.overClocking = overClocking;
         this.coreCount = coreCount;
+    }
+
+    public CpuShop() {
+        super();
     }
 
     @Override
