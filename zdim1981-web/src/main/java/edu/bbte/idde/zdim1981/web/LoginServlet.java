@@ -3,7 +3,6 @@ package edu.bbte.idde.zdim1981.web;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import freemarker.template.Version;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -14,14 +13,22 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
+    private Template template;
+
+    @Override
+    public void init() throws ServletException {
+        Configuration cfg = new Configuration(Configuration.VERSION_2_3_23);
+        cfg.setDefaultEncoding("UTF-8");
+        cfg.setClassForTemplateLoading(CpuShopTemplateServlet.class, "/");
+        try {
+            template = cfg.getTemplate("login.ftl");
+        } catch (IOException e) {
+            throw new ServletException();
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Configuration cfg = new Configuration(new Version("2.3.31"));
-
-        cfg.setClassForTemplateLoading(LoginServlet.class, "/");
-        cfg.setDefaultEncoding("UTF-8");
-        Template template = cfg.getTemplate("login.ftl");
         Map<String, Object> templateData = new ConcurrentHashMap<>();
         try {
             template.process(templateData, resp.getWriter());
@@ -43,16 +50,8 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             session.setMaxInactiveInterval(30 * 60);
-            Cookie cookie = new Cookie("user", user);
-            cookie.setMaxAge(30 * 60);
-            response.addCookie(cookie);
             response.sendRedirect("/cputemplate");
         } else {
-            Configuration cfg = new Configuration(new Version("2.3.31"));
-
-            cfg.setClassForTemplateLoading(LoginServlet.class, "/");
-            cfg.setDefaultEncoding("UTF-8");
-            Template template = cfg.getTemplate("login.ftl");
             Map<String, Object> templateData = new ConcurrentHashMap<>();
             try {
                 template.process(templateData, response.getWriter());

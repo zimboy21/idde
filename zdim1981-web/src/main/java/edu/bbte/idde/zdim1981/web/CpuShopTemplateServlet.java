@@ -5,7 +5,6 @@ import edu.bbte.idde.zdim1981.backend.dataaccessobject.mem.CpuShopInMemDao;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import freemarker.template.Version;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,15 +18,22 @@ import java.util.concurrent.ConcurrentHashMap;
 @WebServlet("/cputemplate")
 public class CpuShopTemplateServlet extends HttpServlet {
     private final CpuShopDao cpuShopDao = new CpuShopInMemDao();
+    private Template template;
+
+    @Override
+    public void init() throws ServletException {
+        Configuration cfg = new Configuration(Configuration.VERSION_2_3_23);
+        cfg.setDefaultEncoding("UTF-8");
+        cfg.setClassForTemplateLoading(CpuShopTemplateServlet.class, "/");
+        try {
+            template = cfg.getTemplate("template.ftl");
+        } catch (IOException e) {
+            throw new ServletException();
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Configuration cfg = new Configuration(new Version("2.3.31"));
-
-        cfg.setClassForTemplateLoading(CpuShopTemplateServlet.class, "/");
-        cfg.setDefaultEncoding("UTF-8");
-        Template template = cfg.getTemplate("template.ftl");
-
         Map<String, Object> templateData = new ConcurrentHashMap<>();
         templateData.put("CPUs", cpuShopDao.readAll());
         try {
@@ -40,12 +46,6 @@ public class CpuShopTemplateServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Configuration cfg = new Configuration(new Version("2.3.31"));
-
-        cfg.setClassForTemplateLoading(CpuShopTemplateServlet.class, "/");
-        cfg.setDefaultEncoding("UTF-8");
-        Template template = cfg.getTemplate("template.ftl");
-
         Map<String, Object> templateData = new ConcurrentHashMap<>();
         templateData.put("CPUs", cpuShopDao.readAll());
         try {
