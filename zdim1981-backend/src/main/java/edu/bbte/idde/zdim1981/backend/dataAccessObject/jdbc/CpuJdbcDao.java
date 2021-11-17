@@ -132,4 +132,25 @@ public class CpuJdbcDao implements CpuDao {
         return null;
     }
 
+    @Override
+    public Collection<Cpu> getByMaxPrice(Integer price) {
+        Collection<Cpu> cpus = new ArrayList<>();
+        try {
+            PreparedStatement querry = connection.prepareStatement("select * from cpu where price <= ?");
+            querry.setInt(1, price);
+            ResultSet set = querry.executeQuery();
+            if (set.next()) {
+                Cpu cpu = new Cpu(set.getString(2), set.getDouble(3),
+                        set.getDouble(4), set.getInt(5), set.getInt(6));
+                cpu.setId(set.getLong(1));
+                cpu.setId(set.getLong(1));
+                cpus.add(cpu);
+            }
+        } catch (SQLException e) {
+            LOG.error("Error: ", e);
+        }
+        LOG.info("Cpus with price under " + price + "$ readed!");
+        return cpus;
+    }
+
 }

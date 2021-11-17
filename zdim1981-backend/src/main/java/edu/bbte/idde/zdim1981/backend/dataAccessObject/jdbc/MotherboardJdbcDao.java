@@ -112,22 +112,25 @@ public class MotherboardJdbcDao implements MotherboardDao {
         return motherboards;
     }
 
-    public Motherboard readByMemory(Integer mem) {
+    @Override
+    public Collection<Motherboard> getByMaxPrice(Integer price) {
+        Collection<Motherboard> motherboards = new ArrayList<>();
         try {
-            PreparedStatement querry = connection.prepareStatement("select * from motherboard where memory = ?");
-            querry.setLong(1, mem);
+            PreparedStatement querry = connection.prepareStatement("select * from motherboard where price <= ?");
+            querry.setInt(1, price);
             ResultSet set = querry.executeQuery();
             if (set.next()) {
                 Motherboard motherboard = new Motherboard(set.getString(2),
                         set.getDouble(3), set.getInt(4), set.getString(5),
                         set.getInt(6), set.getLong(7));
                 motherboard.setId(set.getLong(1));
-                LOG.info("Motherboard readed by memory from database");
-                return motherboard;
+                motherboards.add(motherboard);
             }
         } catch (SQLException e) {
             LOG.error("Error: ", e);
         }
-        return null;
+        LOG.info("Motherboards with price under " + price + " $ readed!");
+        return motherboards;
     }
+
 }

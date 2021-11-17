@@ -5,6 +5,7 @@ import edu.bbte.idde.zdim1981.backend.model.Motherboard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -53,4 +54,14 @@ public class MotherboardMemDao implements MotherboardDao {
         return motherboardDatabse.values();
     }
 
+    @Override
+    public Collection<Motherboard> getByMaxPrice(Integer price) {
+        ArrayList<Motherboard> motherboards = new ArrayList<>();
+        for (Motherboard i : motherboardDatabse.values()) {
+            if (i.getPrice() <= price) {
+                motherboards.add(i);
+            }
+        }
+        return motherboards;
+    }
 }

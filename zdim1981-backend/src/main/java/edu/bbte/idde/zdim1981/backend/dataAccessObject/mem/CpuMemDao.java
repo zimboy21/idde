@@ -5,6 +5,7 @@ import edu.bbte.idde.zdim1981.backend.model.Cpu;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -52,6 +53,17 @@ public class CpuMemDao implements CpuDao {
     public Collection<Cpu> readAll() {
         LOG.info("CPU readAll().");
         return cpuShopDatabase.values();
+    }
+
+    @Override
+    public Collection<Cpu> getByMaxPrice(Integer price) {
+        ArrayList<Cpu> cpus = new ArrayList<>();
+        for (Cpu i : cpuShopDatabase.values()) {
+            if (i.getPrice() <= price) {
+                cpus.add(i);
+            }
+        }
+        return cpus;
     }
 
 }
