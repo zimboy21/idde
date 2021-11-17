@@ -1,0 +1,6 @@
+daoType: jdbc
+daoUrl: jdbc:mysql://localhost:3306/idde?useSSL=false
+daoUserName: root
+daoPassword: idde_zdim1981
+daoPoolSize: 10
+daoDriverClassName: com.mysql.jdbc.Driver

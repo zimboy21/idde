@@ -19,7 +19,7 @@ public class LoginServlet extends HttpServlet {
     public void init() throws ServletException {
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_23);
         cfg.setDefaultEncoding("UTF-8");
-        cfg.setClassForTemplateLoading(CpuShopTemplateServlet.class, "/");
+        cfg.setClassForTemplateLoading(HardwareTemplateServlet.class, "/");
         try {
             template = cfg.getTemplate("login.ftl");
         } catch (IOException e) {
@@ -50,7 +50,7 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             session.setMaxInactiveInterval(30 * 60);
-            response.sendRedirect("/cputemplate");
+            response.sendRedirect("/hardwaretemplate");
         } else {
             Map<String, Object> templateData = new ConcurrentHashMap<>();
             try {

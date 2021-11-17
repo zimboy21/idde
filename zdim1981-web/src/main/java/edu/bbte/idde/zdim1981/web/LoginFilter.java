@@ -7,7 +7,7 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-@WebFilter("/cputemplate/*")
+@WebFilter("/hardwaretemplate/*")
 public class LoginFilter extends HttpFilter {
 
     @Override
