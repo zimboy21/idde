@@ -8,7 +8,7 @@ import edu.bbte.idde.zdim1981.backend.config.ConfigFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class JdbcPool {
+public class ConnectionPool {
     private static HikariDataSource hoards;
     private static Config config = ConfigFactory.getConfig();
 

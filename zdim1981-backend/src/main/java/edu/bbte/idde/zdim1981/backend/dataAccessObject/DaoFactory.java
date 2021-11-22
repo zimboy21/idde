@@ -15,8 +15,14 @@ public abstract class DaoFactory {
         if (instance == null) {
             Config config = ConfigFactory.getConfig();
             if ("jdbc".equals(config.getDaoType())) {
+                LOG.info("JdbcDaoFactory created");
                 instance = new JdbcDaoFactory();
             } else if ("mem".equals(config.getDaoType())) {
+                LOG.info("MemDaoFactory created");
+                instance = new MemDaoFactory();
+            } else {
+                config.setDaoType("mem");
+                LOG.info("Unknown DAO type, MemDaoFactory created");
                 instance = new MemDaoFactory();
             }
         }

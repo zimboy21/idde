@@ -1,6 +1,5 @@
 package edu.bbte.idde.zdim1981.backend.dataaccessobject.jdbc;
 
-import edu.bbte.idde.zdim1981.backend.RepositoryException;
 import edu.bbte.idde.zdim1981.backend.dataaccessobject.CpuDao;
 import edu.bbte.idde.zdim1981.backend.model.Cpu;
 import org.slf4j.Logger;
@@ -11,21 +10,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class CpuJdbcDao implements CpuDao {
-    private final Connection connection;
     public static final Logger LOG = LoggerFactory.getLogger(CpuJdbcDao.class);
 
-    public CpuJdbcDao() throws RepositoryException {
-        try {
-            connection = JdbcPool.getConnection();
-            LOG.info("connection created");
-        } catch (SQLException e) {
-            throw new RepositoryException();
-        }
+    private Cpu createEntityFromResult(ResultSet set) throws SQLException {
+        return new Cpu(set.getString(2),
+                set.getDouble(3), set.getDouble(4),
+                set.getInt(5), set.getInt(6));
     }
 
     @Override
     public void create(Cpu entity) {
-        try {
+        try (Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement querry = connection.prepareStatement(
                     "insert into cpu(name, price, clockspeed,"
                             + " overclocking, corecount) values(?, ?, ?, ?, ?)");
@@ -43,7 +38,7 @@ public class CpuJdbcDao implements CpuDao {
 
     @Override
     public void delete(Long id) {
-        try {
+        try (Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement querry = connection.prepareStatement(
                     "delete from cpu where id = ?");
             querry.setLong(1, id);
@@ -56,15 +51,13 @@ public class CpuJdbcDao implements CpuDao {
 
     @Override
     public Cpu read(Long id) {
-        try {
+        try (Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement querry = connection.prepareStatement(
                     "select * from cpu where id = ?");
             querry.setLong(1, id);
             ResultSet set = querry.executeQuery();
             if (set.next()) {
-                Cpu cpu = new Cpu(set.getString(2),
-                        set.getDouble(3), set.getDouble(4),
-                        set.getInt(5), set.getInt(6));
+                Cpu cpu = createEntityFromResult(set);
                 cpu.setId(set.getLong(1));
                 LOG.info("CPU readed by id from database");
                 return cpu;
@@ -77,7 +70,7 @@ public class CpuJdbcDao implements CpuDao {
 
     @Override
     public void update(Cpu entity, Long id) {
-        try {
+        try (Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement querry = connection.prepareStatement(
                     "update cpu set name = ?, price = ?, "
                             + "clockspeed = ?, overclocking = ?, corecount = ? where id = ?");
@@ -97,12 +90,11 @@ public class CpuJdbcDao implements CpuDao {
     @Override
     public Collection<Cpu> readAll() {
         Collection<Cpu> cpus = new ArrayList<>();
-        try {
+        try (Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement querry = connection.prepareStatement("select * from cpu");
             ResultSet set = querry.executeQuery();
             while (set.next()) {
-                Cpu cpu = new Cpu(set.getString(2), set.getDouble(3),
-                        set.getDouble(4), set.getInt(5), set.getInt(6));
+                Cpu cpu = createEntityFromResult(set);
                 cpu.setId(set.getLong(1));
                 cpus.add(cpu);
             }
@@ -113,43 +105,22 @@ public class CpuJdbcDao implements CpuDao {
         return cpus;
     }
 
-    public Cpu readByClockSpeed(Integer clockspeed) {
-        try {
-            PreparedStatement querry = connection.prepareStatement("select * from cpu where clockspeed = ?");
+    @Override
+    public Collection<Cpu> readByMinClockSpeed(Integer clockspeed) {
+        ArrayList<Cpu> cpus = new ArrayList<>();
+        try (Connection connection = ConnectionPool.getConnection()) {
+            PreparedStatement querry = connection.prepareStatement("select * from cpu where clockspeed >= ?");
             querry.setLong(1, clockspeed);
             ResultSet set = querry.executeQuery();
             if (set.next()) {
-                Cpu cpu = new Cpu(set.getString(2),
-                        set.getDouble(3), set.getDouble(4),
-                        set.getInt(5), set.getInt(6));
+                Cpu cpu = createEntityFromResult(set);
                 cpu.setId(set.getLong(1));
-                LOG.info("CPU readed by clockspeed from database");
-                return cpu;
-            }
-        } catch (SQLException e) {
-            LOG.error("Error: ", e);
-        }
-        return null;
-    }
-
-    @Override
-    public Collection<Cpu> getByMaxPrice(Integer price) {
-        Collection<Cpu> cpus = new ArrayList<>();
-        try {
-            PreparedStatement querry = connection.prepareStatement("select * from cpu where price <= ?");
-            querry.setInt(1, price);
-            ResultSet set = querry.executeQuery();
-            if (set.next()) {
-                Cpu cpu = new Cpu(set.getString(2), set.getDouble(3),
-                        set.getDouble(4), set.getInt(5), set.getInt(6));
-                cpu.setId(set.getLong(1));
-                cpu.setId(set.getLong(1));
+                LOG.info("CPU with clockspeed more than " + clockspeed + " readed from database");
                 cpus.add(cpu);
             }
         } catch (SQLException e) {
             LOG.error("Error: ", e);
         }
-        LOG.info("Cpus with price under " + price + "$ readed!");
         return cpus;
     }
 

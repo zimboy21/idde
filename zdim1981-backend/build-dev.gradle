@@ -1,9 +1,0 @@
-application {
-    applicationDefaultJvmArgs = ['-Dprofile=dev']
-    applicationName = "${project.name}-dev"
-}
-distributions {
-    main {
-        baseName = "${project.name}-dev"
-    }
-}

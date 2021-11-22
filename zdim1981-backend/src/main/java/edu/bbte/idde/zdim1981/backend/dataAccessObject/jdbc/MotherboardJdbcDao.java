@@ -1,6 +1,5 @@
 package edu.bbte.idde.zdim1981.backend.dataaccessobject.jdbc;
 
-import edu.bbte.idde.zdim1981.backend.RepositoryException;
 import edu.bbte.idde.zdim1981.backend.dataaccessobject.MotherboardDao;
 import edu.bbte.idde.zdim1981.backend.model.Motherboard;
 import org.slf4j.Logger;
@@ -11,21 +10,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class MotherboardJdbcDao implements MotherboardDao {
-    private final Connection connection;
     public static final Logger LOG = LoggerFactory.getLogger(MotherboardJdbcDao.class);
 
-    public MotherboardJdbcDao() throws RepositoryException {
-        try {
-            connection = JdbcPool.getConnection();
-            LOG.info("connection created");
-        } catch (SQLException e) {
-            throw new RepositoryException();
-        }
+    private Motherboard createEntityFromResult(ResultSet set) throws SQLException {
+        return new Motherboard(set.getString(2),
+                set.getDouble(3), set.getInt(4), set.getString(5),
+                set.getInt(6), set.getLong(7));
     }
 
     @Override
     public void create(Motherboard entity) {
-        try {
+        try (Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement querry = connection.prepareStatement("insert into motherboard(name, "
                     + "price, fsb, bios, memory, cpuid) values(?, ?, ?, ?, ?, ?)");
             querry.setString(1, entity.getName());
@@ -43,7 +38,7 @@ public class MotherboardJdbcDao implements MotherboardDao {
 
     @Override
     public void delete(Long id) {
-        try {
+        try (Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement querry = connection.prepareStatement("delete from motherboard where id = ?");
             querry.setLong(1, id);
             querry.executeUpdate();
@@ -55,14 +50,12 @@ public class MotherboardJdbcDao implements MotherboardDao {
 
     @Override
     public Motherboard read(Long id) {
-        try {
+        try (Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement querry = connection.prepareStatement("select * from motherboard where id = ?");
             querry.setLong(1, id);
             ResultSet set = querry.executeQuery();
             if (set.next()) {
-                Motherboard motherboard = new Motherboard(set.getString(2),
-                        set.getDouble(3), set.getInt(4), set.getString(5),
-                        set.getInt(6), set.getLong(7));
+                Motherboard motherboard = createEntityFromResult(set);
                 motherboard.setId(set.getLong(1));
                 LOG.info("Motherboard readed by ID from database");
                 return motherboard;
@@ -75,7 +68,7 @@ public class MotherboardJdbcDao implements MotherboardDao {
 
     @Override
     public void update(Motherboard entity, Long id) {
-        try {
+        try (Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement querry = connection.prepareStatement("update motherboard set name = ?, "
                     + "price = ?, fsb = ?, bios = ?, memory = ?, cpuid = cpuid where id = ?");
             querry.setString(1, entity.getName());
@@ -95,13 +88,11 @@ public class MotherboardJdbcDao implements MotherboardDao {
     @Override
     public Collection<Motherboard> readAll() {
         Collection<Motherboard> motherboards = new ArrayList<>();
-        try {
+        try (Connection connection = ConnectionPool.getConnection()) {
             PreparedStatement querry = connection.prepareStatement("select * from motherboard");
             ResultSet set = querry.executeQuery();
             while (set.next()) {
-                Motherboard motherboard = new Motherboard(set.getString(2),
-                        set.getDouble(3), set.getInt(4),
-                        set.getString(5), set.getInt(6), set.getLong(7));
+                Motherboard motherboard = createEntityFromResult(set);
                 motherboard.setId(set.getLong(1));
                 motherboards.add(motherboard);
             }
@@ -113,23 +104,21 @@ public class MotherboardJdbcDao implements MotherboardDao {
     }
 
     @Override
-    public Collection<Motherboard> getByMaxPrice(Integer price) {
+    public Collection<Motherboard> readByMinMemory(Integer memory) {
         Collection<Motherboard> motherboards = new ArrayList<>();
-        try {
-            PreparedStatement querry = connection.prepareStatement("select * from motherboard where price <= ?");
-            querry.setInt(1, price);
+        try (Connection connection = ConnectionPool.getConnection()) {
+            PreparedStatement querry = connection.prepareStatement("select * from motherboard where memory >= ?");
+            querry.setInt(1, memory);
             ResultSet set = querry.executeQuery();
             if (set.next()) {
-                Motherboard motherboard = new Motherboard(set.getString(2),
-                        set.getDouble(3), set.getInt(4), set.getString(5),
-                        set.getInt(6), set.getLong(7));
+                Motherboard motherboard = createEntityFromResult(set);
                 motherboard.setId(set.getLong(1));
                 motherboards.add(motherboard);
             }
         } catch (SQLException e) {
             LOG.error("Error: ", e);
         }
-        LOG.info("Motherboards with price under " + price + " $ readed!");
+        LOG.info("Motherboards with memory more than " + memory + " $ readed!");
         return motherboards;
     }
 

@@ -55,10 +55,10 @@ public class MotherboardMemDao implements MotherboardDao {
     }
 
     @Override
-    public Collection<Motherboard> getByMaxPrice(Integer price) {
+    public Collection<Motherboard> readByMinMemory(Integer memory) {
         ArrayList<Motherboard> motherboards = new ArrayList<>();
         for (Motherboard i : motherboardDatabse.values()) {
-            if (i.getPrice() <= price) {
+            if (i.getPrice() >= memory) {
                 motherboards.add(i);
             }
         }

@@ -56,10 +56,10 @@ public class CpuMemDao implements CpuDao {
     }
 
     @Override
-    public Collection<Cpu> getByMaxPrice(Integer price) {
+    public Collection<Cpu> readByMinClockSpeed(Integer clockSpeed) {
         ArrayList<Cpu> cpus = new ArrayList<>();
         for (Cpu i : cpuShopDatabase.values()) {
-            if (i.getPrice() <= price) {
+            if (i.getClockSpeed() >= clockSpeed) {
                 cpus.add(i);
             }
         }

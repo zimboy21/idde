@@ -44,7 +44,6 @@ public class HardwareTemplateServlet extends HttpServlet {
         } catch (TemplateException e) {
             throw new ServletException();
         }
-
     }
 
     @Override

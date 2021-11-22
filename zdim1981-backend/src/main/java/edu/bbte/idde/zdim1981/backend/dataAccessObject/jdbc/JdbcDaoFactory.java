@@ -1,6 +1,5 @@
 package edu.bbte.idde.zdim1981.backend.dataaccessobject.jdbc;
 
-import edu.bbte.idde.zdim1981.backend.RepositoryException;
 import edu.bbte.idde.zdim1981.backend.dataaccessobject.CpuDao;
 import edu.bbte.idde.zdim1981.backend.dataaccessobject.DaoFactory;
 import edu.bbte.idde.zdim1981.backend.dataaccessobject.MotherboardDao;
@@ -15,11 +14,7 @@ public class JdbcDaoFactory extends DaoFactory {
     @Override
     public synchronized CpuDao getCpuDao() {
         if (cpuDao == null) {
-            try {
-                cpuDao = new CpuJdbcDao();
-            } catch (RepositoryException e) {
-                LOG.error("Error: ", e);
-            }
+            cpuDao = new CpuJdbcDao();
         }
         return cpuDao;
     }
@@ -27,11 +22,7 @@ public class JdbcDaoFactory extends DaoFactory {
     @Override
     public synchronized MotherboardDao getMotherboardDao() {
         if (mbDao == null) {
-            try {
-                mbDao = new MotherboardJdbcDao();
-            } catch (RepositoryException e) {
-                LOG.error("Error: ", e);
-            }
+            mbDao = new MotherboardJdbcDao();
         }
         return mbDao;
     }

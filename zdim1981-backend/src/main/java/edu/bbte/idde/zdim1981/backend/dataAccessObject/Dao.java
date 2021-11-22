@@ -14,6 +14,4 @@ public interface Dao<T extends BaseEntity> {
     void update(T entity, Long id);
 
     Collection<T> readAll();
-
-    Collection<T> getByMaxPrice(Integer price);
 }

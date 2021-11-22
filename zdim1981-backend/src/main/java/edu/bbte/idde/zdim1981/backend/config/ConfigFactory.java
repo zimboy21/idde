@@ -13,16 +13,12 @@ public class ConfigFactory {
     public static final Logger LOG = LoggerFactory.getLogger(ConfigFactory.class);
 
     public static synchronized Config getConfig() {
-        if (config == null) {
-            InputStream input = Config.class.getResourceAsStream(getConfigFileName());
-            try {
-                config = new ObjectMapper(new YAMLFactory()).readValue(input,Config.class);
-                LOG.info(config.toString());
-            } catch (IOException e) {
-                config = new Config();
-                config.setDaoType("mem");
-                LOG.error("Error yaml");
-            }
+        InputStream input = Config.class.getResourceAsStream(getConfigFileName());
+        try {
+            config = new ObjectMapper(new YAMLFactory()).readValue(input,Config.class);
+            LOG.info("{}", config);
+        } catch (IOException e) {
+            LOG.error("Error yaml");
         }
         return config;
     }
