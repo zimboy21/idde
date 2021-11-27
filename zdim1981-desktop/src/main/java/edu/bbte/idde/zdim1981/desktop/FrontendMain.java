@@ -1,8 +1,9 @@
 package edu.bbte.idde.zdim1981.desktop;
 
-import edu.bbte.idde.zdim1981.backend.dataaccessobject.mem.CpuShopInMemDao;
+import edu.bbte.idde.zdim1981.backend.dataaccessobject.CpuDao;
+import edu.bbte.idde.zdim1981.backend.dataaccessobject.DaoFactory;
 import edu.bbte.idde.zdim1981.backend.model.BaseEntity;
-import edu.bbte.idde.zdim1981.backend.model.CpuShop;
+import edu.bbte.idde.zdim1981.backend.model.Cpu;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,16 +12,14 @@ public class FrontendMain {
     public static final Logger LOG = LoggerFactory.getLogger(FrontendMain.class);
 
     public static void main(String[] args) {
-        CpuShopInMemDao cpuDao = new CpuShopInMemDao();
-        cpuDao.create(new CpuShop("AMD Ryzen 7 5800X", 2000D, 3.4, 1, 16));
-        CpuShop intel = new CpuShop("Intel Core i7-11600K", 1750.6, 3.6, 2, 24);
-
-        LOG.debug(cpuDao.read(0L).toString());
-        cpuDao.update(intel, 0L);
-        LOG.debug(cpuDao.read(0L).toString());
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        CpuDao cpuDao = daoFactory.getCpuDao();
+        LOG.debug("{}", cpuDao.read(0L));
         cpuDao.delete(0L);
-
-        cpuDao.create(new CpuShop("Intel Core i7-11600K", 2000D, 3.4, 1, 16));
+        Cpu newcpu = new Cpu("AMD Ryzen 7 5800X", 2000D, 3.4, 1, 16);
+        cpuDao.create(newcpu);
+        Cpu intel = new Cpu("Intel Core i9-11600K", 1850D, 4.8, 1, 32);
+        cpuDao.update(intel, 0L);
         cpuDao.create(intel);
 
         for (BaseEntity cpu : cpuDao.readAll()) {

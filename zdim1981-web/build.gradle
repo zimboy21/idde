@@ -16,7 +16,7 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.0'
 }
 
-def deploymentName = 'ROOT'
+def deploymentName = 'zdim1981-web'
 
 def tomcatHome = System.getenv('CATALINA_HOME')
 logger.quiet("Tomcat home detected as '${tomcatHome}'")
