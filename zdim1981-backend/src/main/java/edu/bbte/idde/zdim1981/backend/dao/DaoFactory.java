@@ -20,10 +20,6 @@ public abstract class DaoFactory {
             } else if ("mem".equals(config.getDaoType())) {
                 LOG.info("MemDaoFactory created");
                 instance = new MemDaoFactory();
-            } else {
-                config.setDaoType("mem");
-                LOG.info("Unknown DAO type, MemDaoFactory created");
-                instance = new MemDaoFactory();
             }
         }
         return instance;
