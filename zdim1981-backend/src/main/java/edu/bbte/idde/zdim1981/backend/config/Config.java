@@ -12,4 +12,7 @@ public class Config {
     private String daoPassword;
     private Integer daoPoolSize;
     private String daoDriverClassName;
+
+    public void setDaoType(String mem) {
+    }
 }
