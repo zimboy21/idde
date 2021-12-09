@@ -24,7 +24,7 @@ public class MotherboardJdbcDao implements MotherboardDao {
                 set.getInt(6), set.getLong(7));
     }
 
-    private Motherboard getLastInserted() throws SQLException {
+    private Motherboard getLastInserted() {
         try (Connection connection = connectionPool.getDataSource().getConnection()) {
             PreparedStatement querry = connection.prepareStatement("select * from cpu "
                     + "where id = (select MAX(id) from cpu)");

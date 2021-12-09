@@ -24,7 +24,7 @@ public class CpuJdbcDao implements CpuDao {
                 set.getInt(5), set.getInt(6));
     }
 
-    private Cpu getLastInserted() throws SQLException {
+    private Cpu getLastInserted() {
         try (Connection connection = connectionPool.getDataSource().getConnection()) {
             PreparedStatement querry = connection.prepareStatement("select * from cpu "
                     + "where id = (select MAX(id) from cpu)");
