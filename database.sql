@@ -23,8 +23,9 @@ create table if not exists  motherboard(
     bios varchar(50),
     memory integer,
     cpuid bigint,
-    foreign key(cpuid) references cpu(id)
+    foreign key(cpuid) references cpu(id) on delete cascade
 );
 
 insert into cpu(name, price, clockspeed, overclocking, corecount) values("AMD Ryzen 7 5800X", 2000.2, 3.4, 1, 16);
+insert into cpu(name, price, clockspeed, overclocking, corecount) values("Intel Core i9", 3540.2, 4.9, 1, 32);
 insert into motherboard(name, price, fsb, bios, memory, cpuid) values("ASUS PTGD1-LA",  550, 800, "HP BIOS", 128 , 1);
