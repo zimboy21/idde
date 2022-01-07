@@ -62,14 +62,16 @@ public class MotherboardJdbcDao implements MotherboardDao {
     }
 
     @Override
-    public void delete(Long id) {
+    public Boolean delete(Long id) {
         try (Connection connection = connectionPool.getDataSource().getConnection()) {
             PreparedStatement querry = connection.prepareStatement("delete from motherboard where id = ?");
             querry.setLong(1, id);
             querry.executeUpdate();
             log.info("Motherboard deleted from database");
+            return true;
         } catch (SQLException e) {
             log.error("Error: ", e);
+            return false;
         }
     }
 

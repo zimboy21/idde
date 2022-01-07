@@ -24,37 +24,25 @@ public class CpuJdbcDao implements CpuDao {
                 set.getInt(5), set.getInt(6));
     }
 
-    private Cpu getLastInserted() {
-        try (Connection connection = connectionPool.getDataSource().getConnection()) {
-            PreparedStatement querry = connection.prepareStatement("select * from cpu "
-                    + "where id = (select MAX(id) from cpu)");
-            ResultSet set = querry.executeQuery();
-            if (set.next()) {
-                Cpu cpu = createEntityFromResult(set);
-                cpu.setId(set.getLong(1));
-                log.info("Last inserted motherboard readed by ID from database");
-                return cpu;
-            }
-        }  catch (SQLException e) {
-            log.error("Error: ", e);
-        }
-        return null;
-    }
-
     @Override
     public Cpu create(Cpu entity) {
         try (Connection connection = connectionPool.getDataSource().getConnection()) {
             PreparedStatement querry = connection.prepareStatement(
                     "insert into cpu(name, price, clockspeed,"
-                            + " overclocking, corecount) values(?, ?, ?, ?, ?)");
+                            + " overclocking, corecount) values(?, ?, ?, ?, ?)",
+                    PreparedStatement.RETURN_GENERATED_KEYS);
             querry.setString(1, entity.getName());
             querry.setDouble(2, entity.getPrice());
             querry.setDouble(3, entity.getClockSpeed());
             querry.setInt(4, entity.getOverClocking());
             querry.setInt(5, entity.getCoreCount());
             querry.executeUpdate();
+            ResultSet ids = querry.getGeneratedKeys();
+            if (ids.next()) {
+                entity.setId(ids.getLong(1));
+            }
             log.info("CPu created in database");
-            return getLastInserted();
+            return entity;
         } catch (SQLException e) {
             log.error("Error: ", e);
         }
@@ -62,15 +50,17 @@ public class CpuJdbcDao implements CpuDao {
     }
 
     @Override
-    public void delete(Long id) {
+    public Boolean delete(Long id) {
         try (Connection connection = connectionPool.getDataSource().getConnection()) {
             PreparedStatement querry = connection.prepareStatement(
                     "delete from cpu where id = ?");
             querry.setLong(1, id);
             querry.executeUpdate();
             log.info("CPU deleted from database");
+            return true;
         } catch (SQLException e) {
             log.error("Error: ", e);
+            return false;
         }
     }
 

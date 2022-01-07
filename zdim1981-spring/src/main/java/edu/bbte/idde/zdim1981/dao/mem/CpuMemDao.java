@@ -48,9 +48,10 @@ public class CpuMemDao implements CpuDao {
     }
 
     @Override
-    public void delete(Long id) {
+    public Boolean delete(Long id) {
         log.info("CPU " + id + " deleted.");
         cpuShopDatabase.remove(id);
+        return true;
     }
 
     @Override

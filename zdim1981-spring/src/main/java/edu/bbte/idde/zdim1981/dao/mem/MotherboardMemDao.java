@@ -47,9 +47,10 @@ public class MotherboardMemDao implements MotherboardDao {
     }
 
     @Override
-    public void delete(Long id) {
+    public Boolean delete(Long id) {
         log.info("Motherboard " + id + " deleted.");
         motherboardDatabse.remove(id);
+        return true;
     }
 
     @Override

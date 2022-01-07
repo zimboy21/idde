@@ -11,7 +11,7 @@ import java.util.Collection;
 public interface Dao<T extends BaseEntity> {
     T create(T entity);
 
-    void delete(Long id);
+    Boolean delete(Long id);
 
     T read(Long id);
 

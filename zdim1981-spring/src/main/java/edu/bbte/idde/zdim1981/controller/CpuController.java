@@ -61,10 +61,8 @@ public class CpuController {
     @DeleteMapping("/{id}")
     @ResponseBody
     public void delete(@PathVariable("id") Long id) {
-        Cpu cpu = cpuDao.read(id);
-        if (cpu == null) {
+        if (!cpuDao.delete(id)) {
             throw new NotFoundException();
         }
-        cpuDao.delete(id);
     }
 }
