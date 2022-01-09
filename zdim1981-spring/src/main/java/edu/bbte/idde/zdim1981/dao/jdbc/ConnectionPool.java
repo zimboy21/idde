@@ -3,14 +3,16 @@ package edu.bbte.idde.zdim1981.dao.jdbc;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
 @Configuration
-@Profile("jdbc")
+@Profile("!mem")
 public class ConnectionPool {
     @Value("${daoUrl}")
     private String url;
@@ -23,6 +25,8 @@ public class ConnectionPool {
     @Value("${daoPoolSize}")
     private Integer pool;
 
+    @Bean
+    @Primary
     public DataSource getDataSource() throws SQLException {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(url);

@@ -26,15 +26,15 @@ public class CpuController {
     public Collection<CpuDetailedDto> getCpus(@RequestParam(value = "clockSpeed",
             required = false) Integer clockSpeed) {
         if (clockSpeed == null) {
-            return cpuMapper.collectModelsToDtos(cpuDao.readAll());
+            return cpuMapper.collectModelsToDtos(cpuDao.findAll());
         }
-        return cpuMapper.collectModelsToDtos(cpuDao.readByMinClockSpeed(clockSpeed));
+        return cpuMapper.collectModelsToDtos(cpuDao.readByClockSpeed(clockSpeed));
     }
 
     @GetMapping("/{id}")
     @ResponseBody
     public CpuDetailedDto getCpusById(@PathVariable("id") Long id) {
-        Cpu cpu = cpuDao.read(id);
+        Cpu cpu = cpuDao.getById(id);
         if (cpu == null) {
             throw new NotFoundException();
         }
@@ -45,24 +45,28 @@ public class CpuController {
     @ResponseBody
     public CpuDetailedDto create(@RequestBody @Valid CpuCreationDto cpuCreationDto) {
         Cpu cpu = cpuMapper.dtoToModel(cpuCreationDto);
-        return cpuMapper.modelToDto(cpuDao.create(cpu));
+        return cpuMapper.modelToDto(cpuDao.saveAndFlush(cpu));
     }
 
     @PutMapping("/{id}")
     @ResponseBody
     public void update(@PathVariable("id") Long id, @RequestBody @Valid CpuCreationDto cpuCreationDto) {
-        Cpu cpu = cpuDao.read(id);
+        Cpu cpu = cpuDao.getById(id);
         if (cpu == null) {
             throw new NotFoundException();
         }
-        cpuDao.update(cpuMapper.dtoToModel(cpuCreationDto), id);
+        cpu = cpuMapper.dtoToModel(cpuCreationDto);
+        cpu.setId(id);
+        cpuDao.save(cpu);
     }
 
     @DeleteMapping("/{id}")
     @ResponseBody
     public void delete(@PathVariable("id") Long id) {
-        if (!cpuDao.delete(id)) {
+        Cpu cpu = cpuDao.getById(id);
+        if (cpu == null) {
             throw new NotFoundException();
         }
+        cpuDao.deleteById(id);
     }
 }

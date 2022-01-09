@@ -9,13 +9,13 @@ import java.util.Collection;
 @Repository
 @Profile("mem")
 public interface Dao<T extends BaseEntity> {
-    T create(T entity);
+    T saveAndFlush(T entity);
 
-    Boolean delete(Long id);
+    void deleteById(Long id);
 
-    T read(Long id);
+    T getById(Long id);
 
-    void update(T entity, Long id);
+    T save(T entity);
 
-    Collection<T> readAll();
+    Collection<T> findAll();
 }
