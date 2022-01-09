@@ -57,7 +57,7 @@ public class MotherboardController {
         try {
             Cpu cpu = cpuDao.getById(cpuId);
             Collection<Motherboard> motherboardCollection = cpu.getMotherboardCollection();
-            motherboardCollection.removeIf(motherboard -> motherboard.getId() == motherboardId);
+            motherboardCollection.removeIf(motherboard -> motherboard.getId().equals(motherboardId));
             cpu.setMotherboardCollection(motherboardCollection);
             cpuDao.save(cpu);
         } catch (NotFoundException e) {
