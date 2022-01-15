@@ -6,13 +6,16 @@ import edu.bbte.idde.zdim1981.dto.incoming.CpuCreationDto;
 import edu.bbte.idde.zdim1981.dto.outgoing.CpuDetailedDto;
 import edu.bbte.idde.zdim1981.mapper.CpuMapper;
 import edu.bbte.idde.zdim1981.model.Cpu;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.Collection;
 
+@Slf4j
 @Controller
 @RequestMapping("/cpus")
 public class CpuController {
@@ -34,11 +37,13 @@ public class CpuController {
     @GetMapping("/{id}")
     @ResponseBody
     public CpuDetailedDto getCpusById(@PathVariable("id") Long id) {
-        Cpu cpu = cpuDao.getById(id);
-        if (cpu == null) {
+        try {
+            Cpu cpu = cpuDao.getById(id);
+            return cpuMapper.modelToDto(cpu);
+        } catch (EntityNotFoundException e) {
+            log.error(e.toString());
             throw new NotFoundException();
         }
-        return cpuMapper.modelToDto(cpu);
     }
 
     @PostMapping
@@ -51,22 +56,24 @@ public class CpuController {
     @PutMapping("/{id}")
     @ResponseBody
     public void update(@PathVariable("id") Long id, @RequestBody @Valid CpuCreationDto cpuCreationDto) {
-        Cpu cpu = cpuDao.getById(id);
-        if (cpu == null) {
+        try {
+            Cpu cpu = cpuMapper.dtoToModel(cpuCreationDto);
+            cpu.setId(id);
+            cpuDao.save(cpu);
+        } catch (EntityNotFoundException e) {
+            log.error(e.toString());
             throw new NotFoundException();
         }
-        cpu = cpuMapper.dtoToModel(cpuCreationDto);
-        cpu.setId(id);
-        cpuDao.save(cpu);
     }
 
     @DeleteMapping("/{id}")
     @ResponseBody
     public void delete(@PathVariable("id") Long id) {
-        Cpu cpu = cpuDao.getById(id);
-        if (cpu == null) {
+        try {
+            cpuDao.deleteById(id);
+        } catch (EntityNotFoundException e) {
+            log.error(e.toString());
             throw new NotFoundException();
         }
-        cpuDao.deleteById(id);
     }
 }

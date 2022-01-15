@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.Collection;
 
@@ -28,9 +29,9 @@ public class MotherboardController {
         try {
             Cpu cpu = cpuDao.getById(cpuId);
             return cpu.getMotherboardCollection();
-        } catch (NotFoundException e) {
+        } catch (EntityNotFoundException e) {
             log.error(e.toString());
-            return null;
+            throw new NotFoundException();
         }
     }
 
@@ -40,15 +41,20 @@ public class MotherboardController {
         try {
             Cpu cpu = cpuDao.getById(cpuId);
             Collection<Motherboard> motherboardCollection = cpu.getMotherboardCollection();
+            Motherboard auxMotherBoard = new Motherboard();
             Motherboard motherboard = motherboardMapper.dtoToModel(motherboardCreationDto);
             motherboard.setCpu(cpu);
             motherboardCollection.add(motherboard);
             cpu.setMotherboardCollection(motherboardCollection);
             cpuDao.save(cpu);
-            return motherboardMapper.modelToDto(motherboard);
-        } catch (NotFoundException e) {
+            motherboardCollection = cpu.getMotherboardCollection();
+            for (Motherboard i : motherboardCollection) {
+                auxMotherBoard = i;
+            }
+            return motherboardMapper.modelToDto(auxMotherBoard);
+        } catch (EntityNotFoundException e) {
             log.error(e.toString());
-            return null;
+            throw new NotFoundException();
         }
     }
 
@@ -60,8 +66,9 @@ public class MotherboardController {
             motherboardCollection.removeIf(motherboard -> motherboard.getId().equals(motherboardId));
             cpu.setMotherboardCollection(motherboardCollection);
             cpuDao.save(cpu);
-        } catch (NotFoundException e) {
+        } catch (EntityNotFoundException e) {
             log.error(e.toString());
+            throw new NotFoundException();
         }
     }
 }
