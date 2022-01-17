@@ -6,13 +6,16 @@ import edu.bbte.idde.zdim1981.dto.incoming.CpuCreationDto;
 import edu.bbte.idde.zdim1981.dto.outgoing.CpuDetailedDto;
 import edu.bbte.idde.zdim1981.mapper.CpuMapper;
 import edu.bbte.idde.zdim1981.model.Cpu;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.Collection;
 
+@Slf4j
 @Controller
 @RequestMapping("/cpus")
 public class CpuController {
@@ -26,45 +29,51 @@ public class CpuController {
     public Collection<CpuDetailedDto> getCpus(@RequestParam(value = "clockSpeed",
             required = false) Integer clockSpeed) {
         if (clockSpeed == null) {
-            return cpuMapper.collectModelsToDtos(cpuDao.readAll());
+            return cpuMapper.collectModelsToDtos(cpuDao.findAll());
         }
-        return cpuMapper.collectModelsToDtos(cpuDao.readByMinClockSpeed(clockSpeed));
+        return cpuMapper.collectModelsToDtos(cpuDao.readByClockSpeed(clockSpeed));
     }
 
     @GetMapping("/{id}")
     @ResponseBody
     public CpuDetailedDto getCpusById(@PathVariable("id") Long id) {
-        Cpu cpu = cpuDao.read(id);
-        if (cpu == null) {
+        try {
+            Cpu cpu = cpuDao.getById(id);
+            return cpuMapper.modelToDto(cpu);
+        } catch (EntityNotFoundException e) {
+            log.error(e.toString());
             throw new NotFoundException();
         }
-        return cpuMapper.modelToDto(cpu);
     }
 
     @PostMapping
     @ResponseBody
     public CpuDetailedDto create(@RequestBody @Valid CpuCreationDto cpuCreationDto) {
         Cpu cpu = cpuMapper.dtoToModel(cpuCreationDto);
-        return cpuMapper.modelToDto(cpuDao.create(cpu));
+        return cpuMapper.modelToDto(cpuDao.saveAndFlush(cpu));
     }
 
     @PutMapping("/{id}")
     @ResponseBody
     public void update(@PathVariable("id") Long id, @RequestBody @Valid CpuCreationDto cpuCreationDto) {
-        Cpu cpu = cpuDao.read(id);
-        if (cpu == null) {
+        try {
+            Cpu cpu = cpuMapper.dtoToModel(cpuCreationDto);
+            cpu.setId(id);
+            cpuDao.save(cpu);
+        } catch (EntityNotFoundException e) {
+            log.error(e.toString());
             throw new NotFoundException();
         }
-        cpuDao.update(cpuMapper.dtoToModel(cpuCreationDto), id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseBody
     public void delete(@PathVariable("id") Long id) {
-        Cpu cpu = cpuDao.read(id);
-        if (cpu == null) {
+        try {
+            cpuDao.deleteById(id);
+        } catch (EntityNotFoundException e) {
+            log.error(e.toString());
             throw new NotFoundException();
         }
-        cpuDao.delete(id);
     }
 }

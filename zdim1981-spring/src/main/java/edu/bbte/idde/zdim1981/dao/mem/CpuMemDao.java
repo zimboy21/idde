@@ -22,13 +22,13 @@ public class CpuMemDao implements CpuDao {
         log.info("CpuMemDao constructed.");
         cpuShopDatabase = new ConcurrentHashMap<>();
         key = new AtomicLong(0L);
-        this.create(new Cpu("AMD Ryzen 7 5800X", 2000D, 3.4, 1, 16));
-        this.create(new Cpu("Intel Core i7-11600K", 1750.6, 3.6, 2, 24));
-        this.create(new Cpu("Intel Core i5", 170D, 2.6, 0, 8));
+        this.saveAndFlush(new Cpu("AMD Ryzen 7 5800X", 2000D, 3.4, 1, 16, new ArrayList<>()));
+        this.saveAndFlush(new Cpu("Intel Core i7-11600K", 1750.6, 3.6, 2, 24, new ArrayList<>()));
+        this.saveAndFlush(new Cpu("Intel Core i5", 170D, 2.6, 0, 8, new ArrayList<>()));
     }
 
     @Override
-    public Cpu create(Cpu entity) {
+    public Cpu saveAndFlush(Cpu entity) {
         log.info("CPU created.");
         entity.setId(key.getAndIncrement());
         cpuShopDatabase.put(entity.getId(), entity);
@@ -36,31 +36,32 @@ public class CpuMemDao implements CpuDao {
     }
 
     @Override
-    public Cpu read(Long id) {
+    public Cpu getById(Long id) {
         log.info("CPU " + id +  " read.");
         return cpuShopDatabase.get(id);
     }
 
     @Override
-    public void update(Cpu entity, Long id) {
-        log.info("CPU " + id + " updated.");
-        cpuShopDatabase.computeIfPresent(id, (key, value) -> entity);
+    public Cpu save(Cpu entity) {
+        log.info("CPU updated.");
+        cpuShopDatabase.computeIfPresent(entity.getId(), (key, value) -> entity);
+        return entity;
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         log.info("CPU " + id + " deleted.");
         cpuShopDatabase.remove(id);
     }
 
     @Override
-    public Collection<Cpu> readAll() {
+    public Collection<Cpu> findAll() {
         log.info("CPU readAll().");
         return cpuShopDatabase.values();
     }
 
     @Override
-    public Collection<Cpu> readByMinClockSpeed(Integer clockSpeed) {
+    public Collection<Cpu> readByClockSpeed(Integer clockSpeed) {
         ArrayList<Cpu> cpus = new ArrayList<>();
         for (Cpu i : cpuShopDatabase.values()) {
             if (i.getClockSpeed() >= clockSpeed) {

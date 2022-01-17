@@ -22,8 +22,6 @@ create table if not exists  motherboard(
     fsb integer,
     bios varchar(50),
     memory integer,
-    cpuid bigint,
-    foreign key(cpuid) references cpu(id) on delete cascade
 );
 
 insert into cpu(name, price, clockspeed, overclocking, corecount) values("AMD Ryzen 7 5800X", 2000.2, 3.4, 1, 16);

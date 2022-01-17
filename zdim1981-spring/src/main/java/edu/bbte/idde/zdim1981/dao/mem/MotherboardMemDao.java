@@ -1,6 +1,7 @@
 package edu.bbte.idde.zdim1981.dao.mem;
 
 import edu.bbte.idde.zdim1981.dao.MotherboardDao;
+import edu.bbte.idde.zdim1981.model.Cpu;
 import edu.bbte.idde.zdim1981.model.Motherboard;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -22,12 +23,13 @@ public class MotherboardMemDao implements MotherboardDao {
         log.info("MotherboardMemDao constructed.");
         motherboardDatabse = new ConcurrentHashMap<>();
         key = new AtomicLong(0L);
-        this.create(new Motherboard("ASUS PTGD1-LA",  550D, 800, "HP BIOS", 128, 2L));
-        this.create(new Motherboard("Asus TUF Z590-Plus", 251.38, 3600, "UEFI BIOS", 512, 1L));
+        Cpu cpu = new Cpu("AMD Ryzen 7 5800X", 2000D, 3.4, 1, 16, new ArrayList<>());
+        this.saveAndFlush(new Motherboard("ASUS PTGD1-LA",  550D, 800, "HP BIOS", 128, cpu));
+        this.saveAndFlush(new Motherboard("Asus TUF Z590-Plus", 251.38, 3600, "UEFI BIOS", 512, cpu));
     }
 
     @Override
-    public Motherboard create(Motherboard entity) {
+    public Motherboard saveAndFlush(Motherboard entity) {
         log.info("Motherboard created.");
         entity.setId(key.getAndIncrement());
         motherboardDatabse.put(entity.getId(), entity);
@@ -35,31 +37,32 @@ public class MotherboardMemDao implements MotherboardDao {
     }
 
     @Override
-    public Motherboard read(Long id) {
+    public Motherboard getById(Long id) {
         log.info("Motherboard " + id +  " read.");
         return motherboardDatabse.get(id);
     }
 
     @Override
-    public void update(Motherboard entity, Long id) {
-        log.info("Motherboard " + id + " updated.");
-        motherboardDatabse.computeIfPresent(id, (key, value) -> entity);
+    public Motherboard save(Motherboard entity) {
+        log.info("Motherboard updated.");
+        motherboardDatabse.computeIfPresent(entity.getId(), (key, value) -> entity);
+        return entity;
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         log.info("Motherboard " + id + " deleted.");
         motherboardDatabse.remove(id);
     }
 
     @Override
-    public Collection<Motherboard> readAll() {
+    public Collection<Motherboard> findAll() {
         log.info("Motherboard readAll().");
         return motherboardDatabse.values();
     }
 
     @Override
-    public Collection<Motherboard> readByMinMemory(Integer memory) {
+    public Collection<Motherboard> readByMemory(Integer memory) {
         ArrayList<Motherboard> motherboards = new ArrayList<>();
         for (Motherboard i : motherboardDatabse.values()) {
             if (i.getPrice() >= memory) {

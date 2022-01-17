@@ -3,3 +3,7 @@ daoUserName: "root"
 daoPassword: "idde_zdim1981"
 daoPoolSize: "10"
 daoDriverClassName: "com.mysql.jdbc.Driver"
+spring.autoconfigure.exclude:
+  - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+  - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration

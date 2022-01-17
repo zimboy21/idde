@@ -19,42 +19,34 @@ public class CpuJdbcDao implements CpuDao {
     private ConnectionPool connectionPool;
 
     private Cpu createEntityFromResult(ResultSet set) throws SQLException {
-        return new Cpu(set.getString(2),
-                set.getDouble(3), set.getDouble(4),
-                set.getInt(5), set.getInt(6));
-    }
-
-    private Cpu getLastInserted() {
-        try (Connection connection = connectionPool.getDataSource().getConnection()) {
-            PreparedStatement querry = connection.prepareStatement("select * from cpu "
-                    + "where id = (select MAX(id) from cpu)");
-            ResultSet set = querry.executeQuery();
-            if (set.next()) {
-                Cpu cpu = createEntityFromResult(set);
-                cpu.setId(set.getLong(1));
-                log.info("Last inserted motherboard readed by ID from database");
-                return cpu;
-            }
-        }  catch (SQLException e) {
-            log.error("Error: ", e);
-        }
-        return null;
+        Cpu cpu = new Cpu();
+        cpu.setClockSpeed(set.getDouble(4));
+        cpu.setCoreCount(set.getInt(6));
+        cpu.setName(set.getString(2));
+        cpu.setOverClocking(set.getInt(5));
+        cpu.setPrice(set.getDouble(3));
+        return cpu;
     }
 
     @Override
-    public Cpu create(Cpu entity) {
+    public Cpu saveAndFlush(Cpu entity) {
         try (Connection connection = connectionPool.getDataSource().getConnection()) {
             PreparedStatement querry = connection.prepareStatement(
                     "insert into cpu(name, price, clockspeed,"
-                            + " overclocking, corecount) values(?, ?, ?, ?, ?)");
+                            + " overclocking, corecount) values(?, ?, ?, ?, ?)",
+                    PreparedStatement.RETURN_GENERATED_KEYS);
             querry.setString(1, entity.getName());
             querry.setDouble(2, entity.getPrice());
             querry.setDouble(3, entity.getClockSpeed());
             querry.setInt(4, entity.getOverClocking());
             querry.setInt(5, entity.getCoreCount());
             querry.executeUpdate();
+            ResultSet ids = querry.getGeneratedKeys();
+            if (ids.next()) {
+                entity.setId(ids.getLong(1));
+            }
             log.info("CPu created in database");
-            return getLastInserted();
+            return entity;
         } catch (SQLException e) {
             log.error("Error: ", e);
         }
@@ -62,7 +54,7 @@ public class CpuJdbcDao implements CpuDao {
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         try (Connection connection = connectionPool.getDataSource().getConnection()) {
             PreparedStatement querry = connection.prepareStatement(
                     "delete from cpu where id = ?");
@@ -75,7 +67,7 @@ public class CpuJdbcDao implements CpuDao {
     }
 
     @Override
-    public Cpu read(Long id) {
+    public Cpu getById(Long id) {
         try (Connection connection = connectionPool.getDataSource().getConnection()) {
             PreparedStatement querry = connection.prepareStatement(
                     "select * from cpu where id = ?");
@@ -94,7 +86,7 @@ public class CpuJdbcDao implements CpuDao {
     }
 
     @Override
-    public void update(Cpu entity, Long id) {
+    public Cpu save(Cpu entity) {
         try (Connection connection = connectionPool.getDataSource().getConnection()) {
             PreparedStatement querry = connection.prepareStatement(
                     "update cpu set name = ?, price = ?, "
@@ -104,16 +96,17 @@ public class CpuJdbcDao implements CpuDao {
             querry.setDouble(3, entity.getClockSpeed());
             querry.setInt(4, entity.getOverClocking());
             querry.setInt(5, entity.getCoreCount());
-            querry.setLong(6, id);
+            querry.setLong(6, entity.getId());
             querry.executeUpdate();
             log.info("CPU updated in database");
         } catch (SQLException e) {
             log.error("Error: ", e);
         }
+        return entity;
     }
 
     @Override
-    public Collection<Cpu> readAll() {
+    public Collection<Cpu> findAll() {
         Collection<Cpu> cpus = new ArrayList<>();
         try (Connection connection = connectionPool.getDataSource().getConnection()) {
             PreparedStatement querry = connection.prepareStatement("select * from cpu");
@@ -131,7 +124,7 @@ public class CpuJdbcDao implements CpuDao {
     }
 
     @Override
-    public Collection<Cpu> readByMinClockSpeed(Integer clockspeed) {
+    public Collection<Cpu> readByClockSpeed(Integer clockspeed) {
         ArrayList<Cpu> cpus = new ArrayList<>();
         try (Connection connection = connectionPool.getDataSource().getConnection()) {
             PreparedStatement querry = connection.prepareStatement("select * from cpu where clockspeed >= ?");
