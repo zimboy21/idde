@@ -13,5 +13,4 @@ public class Motherboard extends BaseEntity {
     private Integer fsb;
     private String bios;
     private Integer memory;
-    private Long cpuId;
 }

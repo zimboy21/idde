@@ -15,7 +15,7 @@ public class MotherboardJdbcDao implements MotherboardDao {
     private Motherboard createEntityFromResult(ResultSet set) throws SQLException {
         return new Motherboard(set.getString(2),
                 set.getDouble(3), set.getInt(4), set.getString(5),
-                set.getInt(6), set.getLong(7));
+                set.getInt(6));
     }
 
     @Override
@@ -28,7 +28,6 @@ public class MotherboardJdbcDao implements MotherboardDao {
             querry.setInt(3, entity.getFsb());
             querry.setString(4, entity.getBios());
             querry.setInt(5, entity.getMemory());
-            querry.setLong(6, entity.getCpuId());
             querry.executeUpdate();
             LOG.info("New motherboard created in database");
         } catch (SQLException e) {
@@ -76,8 +75,7 @@ public class MotherboardJdbcDao implements MotherboardDao {
             querry.setInt(3, entity.getFsb());
             querry.setString(4, entity.getBios());
             querry.setInt(5, entity.getMemory());
-            querry.setLong(6, entity.getCpuId());
-            querry.setLong(7, entity.getId());
+            querry.setLong(6, entity.getId());
             querry.executeUpdate();
             LOG.info("Motherboard updated in database");
         } catch (SQLException e) {
