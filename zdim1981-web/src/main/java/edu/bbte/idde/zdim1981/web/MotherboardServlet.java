@@ -25,7 +25,7 @@ public class MotherboardServlet extends HttpServlet {
     public static final Logger LOG = LoggerFactory.getLogger(MotherboardServlet.class);
 
     private Boolean passedCheck(Motherboard motherboard) {
-        return motherboard.getBios() != null && motherboard.getCpuId() != null
+        return motherboard.getBios() != null
                 && motherboard.getName() != null && motherboard.getFsb() != null
                 && motherboard.getPrice() != null && motherboard.getMemory() != null;
     }

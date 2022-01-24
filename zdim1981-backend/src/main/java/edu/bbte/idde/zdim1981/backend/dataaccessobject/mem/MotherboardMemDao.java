@@ -19,8 +19,8 @@ public class MotherboardMemDao implements MotherboardDao {
         LOG.info("MotherboardMemDao constructed.");
         motherboardDatabse = new ConcurrentHashMap<>();
         key = new AtomicLong(0L);
-        this.create(new Motherboard("ASUS PTGD1-LA",  550D, 800, "HP BIOS", 128, 2L));
-        this.create(new Motherboard("Asus TUF Z590-Plus", 251.38, 3600, "UEFI BIOS", 512, 1L));
+        this.create(new Motherboard("ASUS PTGD1-LA",  550D, 800, "HP BIOS", 128));
+        this.create(new Motherboard("Asus TUF Z590-Plus", 251.38, 3600, "UEFI BIOS", 512));
     }
 
     @Override
