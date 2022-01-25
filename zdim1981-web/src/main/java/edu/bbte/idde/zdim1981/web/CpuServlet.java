@@ -72,6 +72,21 @@ public class CpuServlet extends HttpServlet {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         }
+        String min = req.getParameter("min");
+        String max = req.getParameter("max");
+        if (min != null && max != null) {
+            try {
+                Double minPrice = Double.parseDouble(min);
+                Double maxPrice = Double.parseDouble(max);
+                if (minPrice > maxPrice) {
+                    resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                } else {
+                    cpuDao.deleteByIntervalPrice(minPrice, maxPrice);
+                }
+            } catch (NumberFormatException e) {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        }
     }
 
     @Override

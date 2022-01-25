@@ -124,4 +124,18 @@ public class CpuJdbcDao implements CpuDao {
         return cpus;
     }
 
+    @Override
+    public Integer deleteByIntervalPrice(Double min, Double max) {
+        try (Connection connection = ConnectionPool.getConnection()) {
+            PreparedStatement querry = connection.prepareStatement("delete from cpu where price >= ? and price <= ?");
+            querry.setDouble(1, min);
+            querry.setDouble(2, max);
+            querry.executeUpdate();
+            LOG.info("CPUs deleted in price range: (" + min + ',' + max + ')');
+            return querry.getUpdateCount();
+        } catch (SQLException e) {
+            LOG.error("Error: ", e);
+        }
+        return 0;
+    }
 }

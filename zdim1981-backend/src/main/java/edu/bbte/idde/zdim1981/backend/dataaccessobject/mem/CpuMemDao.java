@@ -66,4 +66,16 @@ public class CpuMemDao implements CpuDao {
         return cpus;
     }
 
+    @Override
+    public Integer deleteByIntervalPrice(Double min, Double max) {
+        LOG.info("CPUs deleted in price range: (" + min + ',' + max + ')');
+        int counter = 0;
+        for (Cpu i : cpuShopDatabase.values()) {
+            if (i.getPrice() >= min && i.getPrice() <= max) {
+                cpuShopDatabase.remove(i.getId());
+                counter += 1;
+            }
+        }
+        return counter;
+    }
 }
