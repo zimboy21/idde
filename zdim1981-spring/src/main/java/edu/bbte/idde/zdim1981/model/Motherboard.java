@@ -3,6 +3,7 @@ package edu.bbte.idde.zdim1981.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -17,6 +18,10 @@ public class Motherboard extends BaseEntity {
     private Integer fsb;
     private String bios;
     private Integer memory;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private LastUpdatedAt lastUpdatedAt;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private LastViewedAt lastViewedAt;
     @Transient
     private Cpu cpu;
 }

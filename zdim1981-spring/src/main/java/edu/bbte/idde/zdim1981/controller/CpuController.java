@@ -6,6 +6,8 @@ import edu.bbte.idde.zdim1981.dto.incoming.CpuCreationDto;
 import edu.bbte.idde.zdim1981.dto.outgoing.CpuDetailedDto;
 import edu.bbte.idde.zdim1981.mapper.CpuMapper;
 import edu.bbte.idde.zdim1981.model.Cpu;
+import edu.bbte.idde.zdim1981.model.LastUpdatedAt;
+import edu.bbte.idde.zdim1981.model.LastViewedAt;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collection;
 
 @Slf4j
@@ -39,6 +43,7 @@ public class CpuController {
     public CpuDetailedDto getCpusById(@PathVariable("id") Long id) {
         try {
             Cpu cpu = cpuDao.getById(id);
+            cpu.setLastViewedAt(new LastViewedAt(LocalDate.now(), LocalTime.now()));
             return cpuMapper.modelToDto(cpu);
         } catch (EntityNotFoundException e) {
             log.error(e.toString());
@@ -59,6 +64,7 @@ public class CpuController {
         try {
             Cpu cpu = cpuMapper.dtoToModel(cpuCreationDto);
             cpu.setId(id);
+            cpu.setLastUpdatedAt(new LastUpdatedAt(LocalDate.now(), LocalTime.now()));
             cpuDao.save(cpu);
         } catch (EntityNotFoundException e) {
             log.error(e.toString());
