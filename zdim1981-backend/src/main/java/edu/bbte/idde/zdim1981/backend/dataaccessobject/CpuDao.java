@@ -6,4 +6,6 @@ import java.util.Collection;
 
 public interface CpuDao extends Dao<Cpu> {
     Collection<Cpu> readByMinClockSpeed(Integer clockSpeed);
+
+    Cpu readEvenIfDeleted(Long id);
 }

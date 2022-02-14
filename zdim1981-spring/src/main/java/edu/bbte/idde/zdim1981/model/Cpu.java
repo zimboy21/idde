@@ -23,4 +23,6 @@ public class Cpu extends BaseEntity {
     @JsonIgnore
     @ToString.Exclude
     private Collection<Motherboard> motherboardCollection;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private CrudEvent crudEvent;
 }

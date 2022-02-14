@@ -16,9 +16,9 @@ public class FrontendMain {
         CpuDao cpuDao = daoFactory.getCpuDao();
         LOG.debug("{}", cpuDao.read(0L));
         cpuDao.delete(0L);
-        Cpu newcpu = new Cpu("AMD Ryzen 7 5800X", 2000D, 3.4, 1, 16);
+        Cpu newcpu = new Cpu("AMD Ryzen 7 5800X", 2000D, 3.4, 1, 16, false);
         cpuDao.create(newcpu);
-        Cpu intel = new Cpu("Intel Core i9-11600K", 1850D, 4.8, 1, 32);
+        Cpu intel = new Cpu("Intel Core i9-11600K", 1850D, 4.8, 1, 32, false);
         cpuDao.update(intel, 0L);
         cpuDao.create(intel);
 

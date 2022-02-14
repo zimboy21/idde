@@ -35,11 +35,16 @@ public class CpuServlet extends HttpServlet {
         ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         resp.setHeader("Content-Type", "application/json");
         String idStr = req.getParameter("id");
+        String evenIfDeleted = req.getParameter("evenIfDeleted");
         if (idStr != null) {
             try {
                 Long id = Long.parseLong(idStr);
-                Cpu cpu = cpuDao.read(id);
-
+                Cpu cpu;
+                if (evenIfDeleted == null) {
+                    cpu = cpuDao.read(id);
+                } else {
+                    cpu = cpuDao.readEvenIfDeleted(id);
+                }
                 if (cpu == null) {
                     resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 } else {

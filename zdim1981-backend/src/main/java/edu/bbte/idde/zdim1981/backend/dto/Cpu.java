@@ -1,5 +1,6 @@
-package edu.bbte.idde.zdim1981.backend.model;
+package edu.bbte.idde.zdim1981.backend.dto;
 
+import edu.bbte.idde.zdim1981.backend.model.BaseEntity;
 import lombok.*;
 
 @Data
@@ -13,5 +14,5 @@ public class Cpu extends BaseEntity {
     private Double clockSpeed;
     private Integer overClocking;
     private Integer coreCount;
-    private Boolean deleted;
 }
+

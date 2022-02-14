@@ -2,10 +2,11 @@ package edu.bbte.idde.zdim1981.backend.dataaccessobject.mem;
 
 import edu.bbte.idde.zdim1981.backend.dataaccessobject.CpuDao;
 import edu.bbte.idde.zdim1981.backend.model.Cpu;
+//import edu.bbte.idde.zdim1981.backend.mapper.CpuMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -19,9 +20,9 @@ public class CpuMemDao implements CpuDao {
         LOG.info("CpuMemDao constructed.");
         cpuShopDatabase = new ConcurrentHashMap<>();
         key = new AtomicLong(0L);
-        this.create(new Cpu("AMD Ryzen 7 5800X", 2000D, 3.4, 1, 16));
-        this.create(new Cpu("Intel Core i7-11600K", 1750.6, 3.6, 2, 24));
-        this.create(new Cpu("Intel Core i5", 170D, 2.6, 0, 8));
+        //this.create(new Cpu("AMD Ryzen 7 5800X", 2000D, 3.4, 1, 16, false));
+        //this.create(new Cpu("Intel Core i7-11600K", 1750.6, 3.6, 2, 24, false));
+        //this.create(new Cpu("Intel Core i5", 170D, 2.6, 0, 8, false));
     }
 
     @Override
@@ -57,13 +58,17 @@ public class CpuMemDao implements CpuDao {
 
     @Override
     public Collection<Cpu> readByMinClockSpeed(Integer clockSpeed) {
-        ArrayList<Cpu> cpus = new ArrayList<>();
-        for (Cpu i : cpuShopDatabase.values()) {
-            if (i.getClockSpeed() >= clockSpeed) {
-                cpus.add(i);
-            }
-        }
-        return cpus;
+//        ArrayList<Cpu> cpus = new ArrayList<>();
+//        for (Cpu i : cpuShopDatabase.values()) {
+//            if (i.getClockSpeed() >= clockSpeed) {
+//                cpus.add(i);
+//            }
+//        }
+        return null;
     }
 
+    @Override
+    public Cpu readEvenIfDeleted(Long id) {
+        return null;
+    }
 }

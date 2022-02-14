@@ -6,6 +6,7 @@ import edu.bbte.idde.zdim1981.dto.incoming.CpuCreationDto;
 import edu.bbte.idde.zdim1981.dto.outgoing.CpuDetailedDto;
 import edu.bbte.idde.zdim1981.mapper.CpuMapper;
 import edu.bbte.idde.zdim1981.model.Cpu;
+import edu.bbte.idde.zdim1981.model.CrudEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.Date;
 
 @Slf4j
 @Controller
@@ -50,6 +52,8 @@ public class CpuController {
     @ResponseBody
     public CpuDetailedDto create(@RequestBody @Valid CpuCreationDto cpuCreationDto) {
         Cpu cpu = cpuMapper.dtoToModel(cpuCreationDto);
+        CrudEvent crudEvent = new CrudEvent(date.getTime(), "create");
+        cpu.setCrudEvent(crudEvent);
         return cpuMapper.modelToDto(cpuDao.saveAndFlush(cpu));
     }
 
@@ -57,8 +61,11 @@ public class CpuController {
     @ResponseBody
     public void update(@PathVariable("id") Long id, @RequestBody @Valid CpuCreationDto cpuCreationDto) {
         try {
+            Date date = new Date();
+            CrudEvent crudEvent = new CrudEvent(date.getTime(), "update");
             Cpu cpu = cpuMapper.dtoToModel(cpuCreationDto);
             cpu.setId(id);
+            cpu.setCrudEvent(crudEvent);
             cpuDao.save(cpu);
         } catch (EntityNotFoundException e) {
             log.error(e.toString());
